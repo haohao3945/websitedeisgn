@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>规划你的副业</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            text-align: center;
+            font-family: '宋体', 'Songti', 'SimSun', sans-serif;
+            color: #333;
+            margin: 50px;
+        }
+
+        #affirmation-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Hide overflow for slider effect */
+        }
+
+        h1 {
+            color: #3498db;
+            font-size: 30px;
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        #affirmation-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        #affirmation-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #question-container {
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #user-answer {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        #confirm-button, #answer-button {
+            font-size: 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+			margin:0 auto;
+        }
+
+        #navigation button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #3498db;
+            transition: color 0.3s ease;
+        }
+
+        #navigation button:hover {
+            color: #2980b9;
+        }
+
+        /* Your existing feedback section remains unchanged */
+		#feedback{
+			display:none;
+		}
+
+        /* Additional style for the textarea */
+        #feedback-textarea {
+            display: none;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="affirmation-container">
+        <h1><strong>规划你的事业！</strong></h1>
+        <img id="affirmation-image" src="affirmation0.jpg" alt="Affirmation Image">
+        <p id="affirmation-text">Loading...</p>
+
+        <div id="question-container">
+            <p id="question-text">开始吧。</p>
+            <button id="answer-button" onclick="toggleAnswer()" style="display:none;">修改答案</button>
+            <textarea id="user-answer" placeholder="在这里输入您的回答" style="display: none;"></textarea>
+            <button id="confirm-button" onclick="confirmAnswer()" style="display: none;">确认</button>
+        </div>
+		<div id="final-container" style="display:none;">
+			<p> 好了，你已经完成了自己的规划，记得实施哦。喜欢这个app 的话，可以把app 存在手机里，下面有教程！</p>
+			
+		</div>
+        <div id="navigation">
+            <button class="arrow-left" style="font-size:15px;" onclick="prevAffirmation()">&larr;上一页</button>
+            <button class="arrow-right" style="font-size:15px;" onclick="nextAffirmation()">下一页&rarr;</button>
+        </div>
+    </div>
+     <div class="section " id="feedback" style="margin-top:80px;" >
+            <div class="row">
+
+                <div class="col-12 col-6" style="margin-bottom:30px;">
+                    <h1>将 Web App 添加到主屏幕</h1>
+                    <p>如果你喜欢这个app, 想要收藏起来，可以在浏览器中打开，然后选择“添加到主屏幕”以创建应用的快捷方式。，可以在浏览器中打开，然后选择“添加到主屏幕”以创建应用的快捷方式。</p>
+                    <iframe src="https://www.youtube.com/embed/dTFaSVUlmA4?si=haZAEGNuYLF5ZXxc" frameborder="0" style="width:100%; min-height:400px;"allowfullscreen></iframe>
+                </div>
+                <div class="col-12 col-6" >
+                    <h1>给我们一点意见</h1>
+                    <form action="https://script.google.com/macros/s/AKfycbxHQefQKgU5bVNMaDdbp_oP8mge0U2UAcvx2Y9M0c8kOJxpuCfJUbimgESUCeKJrZ2blg/exec" method="POST">
+                        <label for="feedback">提供反馈：</label>
+                        <textarea id="moreDetails" name="details" class="form-control" id="feedback" rows="3"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">提交反馈</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- Your existing feedback section remains unchanged -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+		var firsttime = true;
+		function remove(){
+			if (firsttime ===true){
+				affirmations.shift();
+				currentAffirmationIndex = currentAffirmationIndex - 1;
+				document.getElementById("answer-button").style.display = "block";
+				firsttime = false;
+				document.getElementById("affirmation-text").style.textAlign = "left";
+				document.getElementById("question-text").style.border = "1px solid black";
+				document.getElementById("question-text").style.borderRadius="10px";
+
+			}	
+		}	
+		
+        var affirmations = [
+            { text: "会网站设计是好事，但是要打造自己的核心竞争力才是重点\n接下来，这个app会用几个关键问题，来帮你找出你的方向。点击 '下一页' 开始规划吧", image: "energy0.jpg", defaultAnswer: "" },
+            { text: "1.你认为网站设计如何帮你（找到新的工作？自由业接单？等等等等）", image: "energy1.jpg", defaultAnswer: "未回答" },
+			{ text: "2.目标客户群在哪里？(招聘网站？领英？广告？等等等等），列出具体10个", image: "energy2.jpg", defaultAnswer: "未回答" },
+			{ text: "3.他们面对什么问题，需要网站来做什么？", image: "energy3.jpg", defaultAnswer: "未回答" },
+            { text: "4.你如何利用网站解决他们的问题？", image: "energy4.jpg", defaultAnswer: "未回答" },
+            { text: "5.根据之前想到的方案，你能不能做一个作品集？或者免费帮一两个人解决问题，来累计作品集，过后可以告诉目标用户，说你是真的会这项技术的。", image: "energy5.jpg", defaultAnswer: "未回答" },
+            { text: "6.你在目标客户面前，你如何介绍自己？", image: "energy6.jpg", defaultAnswer: "未回答" },
+			{ text: "7.你打算这个星期做什么，让这项事业有所进度？", image: "energy7.jpg", defaultAnswer: "未回答" },
+            { text: "", image: "energy0.jpg", defaultAnswer: "" },
+
+ // Add more affirmations as needed
+        ];
+
+        var currentAffirmationIndex = 0;
+
+		function showAffirmation(index) {
+			var affirmation = affirmations[index];
+			document.getElementById('affirmation-text').innerHTML = affirmation.text.replace(/\n/g, '<br>');
+			document.getElementById('affirmation-image').src = affirmation.image;
+
+			// Replace newline characters with HTML line breaks
+			document.getElementById('question-text').innerHTML = affirmation.defaultAnswer.replace(/\n/g, '<br>');
+		}
+
+		function toggleAnswer() {
+			var textarea = document.getElementById('user-answer');
+			var confirmButton = document.getElementById('confirm-button');
+			var answerButton = document.getElementById('answer-button');
+
+			textarea.style.display = 'block';
+			textarea.placeholder = affirmations[currentAffirmationIndex].defaultAnswer;  // Set placeholder
+			confirmButton.style.display = 'block';
+			answerButton.style.display = 'none';
+		}
+
+		function confirmAnswer() {
+			var textarea = document.getElementById('user-answer');
+			var confirmButton = document.getElementById('confirm-button');
+			var answerButton = document.getElementById('answer-button');
+			var questionText = document.getElementById('question-text');
+			var affirmationText = document.getElementById('affirmation-text');
+
+			textarea.style.display = 'none';
+			confirmButton.style.display = 'none';
+			answerButton.style.display = 'block';
+
+			// Replace newline characters with HTML line breaks
+			var userAnswer = textarea.value.replace(/\n/g, '<br>');
+			
+			// Update the JSON data with the user's input
+			affirmations[currentAffirmationIndex].defaultAnswer = userAnswer;
+			
+			// Display the user's input with line breaks in the HTML
+			questionText.innerHTML = userAnswer;
+			affirmationText.innerText = affirmations[currentAffirmationIndex].text;
+			textarea.value="";
+
+		}
+
+        function nextAffirmation() {
+            currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
+            showAffirmation(currentAffirmationIndex);
+			remove();
+			checklast();
+        }
+
+        function prevAffirmation() {
+            currentAffirmationIndex = (currentAffirmationIndex - 1 + affirmations.length) % affirmations.length;
+            showAffirmation(currentAffirmationIndex);
+			remove();
+			checklast();
+        }
+		
+		function checklast(){
+			if (currentAffirmationIndex === affirmations.length-1){
+				document.getElementById('question-container').style.display = "none";
+				document.getElementById('final-container').style.display="block";
+				document.getElementById('feedback').style.display="block";
+
+				
+			}else{
+				document.getElementById('question-container').style.display = "block";
+				document.getElementById('final-container').style.display="none";			
+			}
+		}
+
+        // Initial display
+        showAffirmation(currentAffirmationIndex);
+		
+	// track view 
+	window.onload = function() {
+	console.log("hi")
+	// Fetch the URL
+    fetch('https://script.google.com/macros/s/AKfycbxMdAmgo9_wsiUIU23pRZpeYuHqd50RdKukED3w1Q_fRmyuGrqQBEcavc-WxI-7PQQg8A/exec?view=7')
+        .then(response => response.json()
+		
+		)
+        .then(data => {
+            // Handle the data as needed
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error fetching data:', error);
+        });
+	//	addAppToHomeScreen()
+	
+	};
+
+	setTimeout(function () {
+		fetch('https://script.google.com/macros/s/AKfycbxMdAmgo9_wsiUIU23pRZpeYuHqd50RdKukED3w1Q_fRmyuGrqQBEcavc-WxI-7PQQg8A/exec?home=7')
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+		})
+		.catch(error => {
+			console.error('Error fetching data:', error);
+		});
+
+      }, 30000);
+    </script>
+</body>
+
+</html>
